@@ -1,0 +1,20 @@
+body {
+  font-family: 'Spectral SC', serif;
+  color: #403434;
+}
+.flash ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0.5em;
+  color: #215cbd;
+}
+.add-category, .add-item {
+  position: relative;
+  top: 0.5em;
+}
+a.name {
+  color: inherit;
+}
+.category, .item {
+  padding: 0 0 2em 0;
+}
