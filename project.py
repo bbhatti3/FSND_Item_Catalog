@@ -28,6 +28,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Udacity project review suggestion for decorator use
+
 
 def login_required(f):
     @wraps(f)
