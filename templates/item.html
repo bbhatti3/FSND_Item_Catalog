@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block content %}
+
+  <h1 class="my-3">{{ item.name }}</h1>
+  <p> {{ item.description }}</p>
+  {% if 'username' in session %}
+    <div>
+      <a href="{{ url_for('editItem', category_name = category_name, item_name = item.name) }}">Edit</a> |
+      <a href="{{ url_for('deleteItem', category_name = category_name, item_name = item.name) }}">Delete</a>
+    </div>
+  {% endif %}
+
+{% endblock %}

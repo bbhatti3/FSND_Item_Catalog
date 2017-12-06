@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block content %}
+
+  <h1 class="my-3">Edit Item</h1>
+  <form action="{{ url_for('editItem', category_name = category_name, item_name = item.name) }}" method="post">
+    <div class="form-group">
+      <label for="item-name">Name</label>
+      <input type="text" name="name" class="form-control" id="item-name" placeholder="{{ item.name }}">
+    </div>
+    <div class="form-group">
+      <label for="item-description">Description</label>
+      <input type="text" name="description" class="form-control" id="item-description" placeholder="{{ item.description }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+{% endblock %}

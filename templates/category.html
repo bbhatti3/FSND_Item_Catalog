@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% block content %}
+  <div class="flash">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+  <div class="row">
+    <div class="categories col-6">
+      {% if 'username' in session %}
+        <a class="add-category" href="{{ url_for('newCategory') }}">Add Category</a>
+      {% endif %}
+      <h1 class="my-3">Categories</h1>
+      {% for category in categories %}
+        <div class="category">
+          <h4><a class="name" href="{{ url_for('showAllItems', category_name = category.name) }}">{{category.name}}</a></h4>
+          {% if 'username' in session %}
+            <div class="category-edit-delete">
+              <a href="{{ url_for('editCategory', category_name = category.name) }}">Edit</a> |
+              <a href="{{ url_for('deleteCategory', category_name = category.name) }}">Delete</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    {% if items %}
+      <div class="items col-6">
+        {% if 'username' in session %}
+          <a class="add-item" href="{{ url_for('newItem', category_name = category.name) }}">Add Item</a>
+        {% endif %}
+        <h1 class="my-3">{{ category.name }}</h1>
+        {% for item in items %}
+          <div class="item">
+            <h4><a class="name" href="{{ url_for('showItem', category_name = category.name, item_name = item.name) }}">{{item.name}}</a></h4>
+            {% if 'username' in session %}
+              <div>
+                <a href="{{ url_for('editItem', category_name = category.name, item_name = item.name) }}">Edit</a> |
+                <a href="{{ url_for('deleteItem', category_name = category.name, item_name = item.name) }}">Delete</a>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+{% endblock %}
