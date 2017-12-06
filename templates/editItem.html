@@ -1,7 +1,13 @@
 {% extends "main.html" %}
 {% block content %}
-
-  <h1 class="my-5">Edit Item</h1>
+<div class="row divider green">
+    <div class="col-md-12"></div>
+</div>
+<div class="row banner menu">
+    <div class="col-md-11 col-md-offset-1 padding-none">
+        <h2>Edit Menu Item</h2>
+    </div>
+</div>
   <form action="{{ url_for('editItem', category_name = category_name, item_name = item.name) }}" method="post">
     <div class="form-group">
       <label for="item-name">Name</label>
@@ -14,5 +20,7 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+
 
 {% endblock %}

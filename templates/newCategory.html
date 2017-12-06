@@ -1,13 +1,28 @@
 {% extends "main.html" %}
 {% block content %}
-
-  <h1 class="my-5">New Category</h1>
-  <form action="{{ url_for('newCategory')}}" method="post">
-    <div class="form-group">
-      <label for="category-name">Name</label>
-      <input type="text" name="name" class="form-control" id="category-name">
+<div class="row divider green">
+    <div class="col-md-12"></div>
+</div>
+<div class="row banner menu">
+    <div class="col-md-11 col-md-offset-1 padding-none">
+        <h1>New Category</h1>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-1 padding-top">
+        <form action="{{ url_for('newCategory')}}" method="post">
+          <div class="form-group">
+            <label for="category-name">Name</label>
+            <input type="text" name="name" class="form-control" id="category-name">
+          </div>
+            <div class="padding-bottom"></div>
+            <button type="submit" class="btn btn-primary" id="submit" type="submit">
+            Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 
 {% endblock %}
