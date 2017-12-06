@@ -2,9 +2,6 @@
 	<!-- <img src="../static/2000px-Sport_balls.svg.png" width="100" height="100" class="d-inline-block align-top" alt=""> -->
 	<div class="container">
 		<a class="navbar-brand" href="{{url_for('showCategories')}}"><strong>Item Catalog Application</strong></a>
-
-
-
 		{% if 'username' not in session %}
 			<a class="navbar-brand" href="{{url_for('showLogin')}}">Login</a>
 

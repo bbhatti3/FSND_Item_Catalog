@@ -12,11 +12,11 @@
     {% endwith %}
   </div>
   <div class="row">
-    <div class="categories col-6">
+            <div class="categories col-4">
       {% if 'username' in session %}
         <a class="add-category" href="{{ url_for('newCategory') }}">Add Category</a>
       {% endif %}
-      <h1 class="my-3">Categories</h1>
+            <h1 class="my-5">Categories</h1>
       {% for category in categories %}
         <div class="category">
           <h4><a class="name" href="{{ url_for('showAllItems', category_name = category.name) }}">{{category.name}}</a></h4>
@@ -30,11 +30,11 @@
       {% endfor %}
     </div>
     {% if items %}
-      <div class="items col-6">
+                <div class="items col-8">
         {% if 'username' in session %}
           <a class="add-item" href="{{ url_for('newItem', category_name = category.name) }}">Add Item</a>
         {% endif %}
-        <h1 class="my-3">{{ category.name }}</h1>
+        <h1 class="my-5">{{ category.name }}</h1>
         {% for item in items %}
           <div class="item">
             <h4><a class="name" href="{{ url_for('showItem', category_name = category.name, item_name = item.name) }}">{{item.name}}</a></h4>

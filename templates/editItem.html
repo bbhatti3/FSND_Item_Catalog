@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block content %}
 
-  <h1 class="my-3">Edit Item</h1>
+  <h1 class="my-5">Edit Item</h1>
   <form action="{{ url_for('editItem', category_name = category_name, item_name = item.name) }}" method="post">
     <div class="form-group">
       <label for="item-name">Name</label>
