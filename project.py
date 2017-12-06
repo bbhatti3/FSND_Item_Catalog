@@ -181,6 +181,7 @@ def itemJSON(category_name, item_name):
 
 
 # Main page / Show all categories
+# Please keep in mind that authentication is done in category.html
 @app.route('/')
 @app.route('/categories/')
 def showCategories():
@@ -191,6 +192,8 @@ def showCategories():
 # Create a new category
 @app.route('/categories/new/', methods=['GET', 'POST'])
 def newCategory():
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'POST':
         newCategory = Category(name=request.form['name'],
                                user_id=login_session['user_id'])
@@ -242,6 +245,7 @@ def deleteCategory(category_name):
 
 
 # Show all items in a category
+# Please keep in mind that authentication is done in category.html
 @app.route('/categories/<string:category_name>/')
 def showAllItems(category_name):
     categories = session.query(Category).order_by(asc(Category.name))
@@ -256,6 +260,12 @@ def showAllItems(category_name):
 @app.route('/categories/<string:category_name>/new/', methods=['GET', 'POST'])
 def newItem(category_name):
     category = session.query(Category).filter_by(name=category_name).one()
+    creator = getUserInfo(category.user_id)
+    if (creator.id != login_session['user_id']):
+        flash('You are not authorized to add new items.'
+              ' Please create your own items in order to add new items.')
+        return redirect(url_for('showAllItems', category_name=category_name))
+
     if request.method == 'POST':
         item = Item(name=request.form['name'],
                     category_id=category.id,
@@ -268,6 +278,24 @@ def newItem(category_name):
         return redirect(url_for('showAllItems', category_name=category_name))
     else:
         return render_template('newItem.html', category_name=category_name)
+
+
+# @app.route('/categories/<string:category_name>/new/',methods=['GET', 'POST'])
+# def newItem(category_name):
+#     category = session.query(Category).filter_by(name=category_name).one()
+
+#     if request.method == 'POST':
+#         item = Item(name=request.form['name'],
+#                     category_id=category.id,
+#                     user_id=login_session['user_id'])
+#         if request.form['description']:
+#             item.description = request.form['description']
+#         session.add(item)
+#         session.commit()
+#         flash('New %s Item Successfully Created' % (item.name))
+#         return redirect(url_for('showAllItems', category_name=category_name))
+#     else:
+#         return render_template('newItem.html', category_name=category_name)
 
 
 # Edit an existing item
@@ -314,6 +342,7 @@ def deleteItem(category_name, item_name):
 
 
 # Show one item's name and description
+# Please keep in mind that authentication is done in item.html
 @app.route('/categories/<string:category_name>/<string:item_name>/')
 def showItem(category_name, item_name):
     item = session.query(Item).filter_by(name=item_name).one()
