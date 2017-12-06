@@ -13,7 +13,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
-
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -27,6 +27,16 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('/login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 # Create anti-forgery state token
 
@@ -191,9 +201,8 @@ def showCategories():
 
 # Create a new category
 @app.route('/categories/new/', methods=['GET', 'POST'])
+@login_required
 def newCategory():
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         newCategory = Category(name=request.form['name'],
                                user_id=login_session['user_id'])
@@ -207,6 +216,7 @@ def newCategory():
 
 # Edit an existing category
 @app.route('/categories/<string:category_name>/edit/', methods=['GET', 'POST'])
+@login_required
 def editCategory(category_name):
     editCategory = session.query(Category).filter_by(name=category_name).one()
     editCreator = getUserInfo(editCategory.user_id)
@@ -228,6 +238,7 @@ def editCategory(category_name):
 # Delete an existing category
 @app.route(
     '/categories/<string:category_name>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteCategory(category_name):
     deleteCategory = session.query(
         Category).filter_by(name=category_name).one()
@@ -258,14 +269,9 @@ def showAllItems(category_name):
 
 # Add a new item to a category
 @app.route('/categories/<string:category_name>/new/', methods=['GET', 'POST'])
+@login_required
 def newItem(category_name):
     category = session.query(Category).filter_by(name=category_name).one()
-    creator = getUserInfo(category.user_id)
-    if (creator.id != login_session['user_id']):
-        flash('You are not authorized to add new items.'
-              ' Please create your own items in order to add new items.')
-        return redirect(url_for('showAllItems', category_name=category_name))
-
     if request.method == 'POST':
         item = Item(name=request.form['name'],
                     category_id=category.id,
@@ -279,28 +285,12 @@ def newItem(category_name):
     else:
         return render_template('newItem.html', category_name=category_name)
 
-
-# @app.route('/categories/<string:category_name>/new/',methods=['GET', 'POST'])
-# def newItem(category_name):
-#     category = session.query(Category).filter_by(name=category_name).one()
-
-#     if request.method == 'POST':
-#         item = Item(name=request.form['name'],
-#                     category_id=category.id,
-#                     user_id=login_session['user_id'])
-#         if request.form['description']:
-#             item.description = request.form['description']
-#         session.add(item)
-#         session.commit()
-#         flash('New %s Item Successfully Created' % (item.name))
-#         return redirect(url_for('showAllItems', category_name=category_name))
-#     else:
-#         return render_template('newItem.html', category_name=category_name)
-
-
 # Edit an existing item
+
+
 @app.route('/categories/<string:category_name>/<string:item_name>/edit/',
            methods=['GET', 'POST'])
+@login_required
 def editItem(category_name, item_name):
     item = session.query(Item).filter_by(name=item_name).one()
     creator = getUserInfo(item.user_id)
@@ -325,6 +315,7 @@ def editItem(category_name, item_name):
 # Delete an existing item
 @app.route('/categories/<string:category_name>/<string:item_name>/delete/',
            methods=['GET', 'POST'])
+@login_required
 def deleteItem(category_name, item_name):
     item = session.query(Item).filter_by(name=item_name).one()
     creator = getUserInfo(item.user_id)
