@@ -7,7 +7,7 @@ This project provides an application that provides a list of items within a vari
 * Please update `client_secrets.json` and `login.html` with your specific client id's and keys
 
 # Running
-* From the vagrant folder launch the VM by typing `vagrant up` then `vagrant ssh`
+* From the vagrant folder open a terminal and launch the VM by typing `vagrant up` then `vagrant ssh`
 * Next type `cd /vagrant/catalog`
 * Then type `python project.py`
 * The application should be available on `http://localhost:8000/`
